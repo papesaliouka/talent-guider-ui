@@ -10,12 +10,12 @@ import {
 } from '@mui/material';
 
 const user = {
-  avatar: '/assets/avatars/avatar-anika-visser.png',
-  city: 'Los Angeles',
-  country: 'USA',
+  avatar: '/assets/avatars/avatar-miron-vitold.png',
+  city: 'Rufisque',
+  country: 'Senegal',
   jobTitle: 'Senior Developer',
-  name: 'Anika Visser',
-  timezone: 'GTM-7'
+  name: 'Pape Saliou KA',
+  timezone: 'GTM-0'
 };
 
 export const AccountProfile = () => (
@@ -56,14 +56,5 @@ export const AccountProfile = () => (
         </Typography>
       </Box>
     </CardContent>
-    <Divider />
-    <CardActions>
-      <Button
-        fullWidth
-        variant="text"
-      >
-        Upload picture
-      </Button>
-    </CardActions>
   </Card>
 );

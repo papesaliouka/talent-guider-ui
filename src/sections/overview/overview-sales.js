@@ -72,18 +72,13 @@ const useChartOptions = () => {
         show: true
       },
       categories: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec'
+        'Mon',
+        'Tue',
+        'Wed',
+        'Thu',
+        'Fri',
+        'Sat',
+        'Sun',
       ],
       labels: {
         offsetY: 5,
@@ -94,7 +89,7 @@ const useChartOptions = () => {
     },
     yaxis: {
       labels: {
-        formatter: (value) => (value > 0 ? `${value}K` : `${value}`),
+        formatter: (value) => (value > 0 ? `${value}` : `${value}`),
         offsetX: -10,
         style: {
           colors: theme.palette.text.secondary
@@ -124,7 +119,7 @@ export const OverviewSales = (props) => {
             Sync
           </Button>
         )}
-        title="Logs"
+        title="Trends"
       />
       <CardContent>
         <Chart

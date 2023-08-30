@@ -13,31 +13,39 @@ import {
 
 const states = [
   {
-    value: 'alabama',
-    label: 'Alabama'
+    value: 'Keur Massar',
+    label: 'Keur Massar'
   },
   {
-    value: 'new-york',
-    label: 'New York'
+    value: 'Dakar',
+    label: 'Dakar'
   },
   {
-    value: 'san-francisco',
-    label: 'San Francisco'
+    value: 'Rufisque',
+    label: 'Rufisque'
   },
   {
-    value: 'los-angeles',
-    label: 'Los Angeles'
-  }
+    value: 'Guédiawaye',
+    label: 'Guédiawaye'
+  },
+  {
+    value: 'Pikine',
+    label: 'Pikine'
+  },
+  {
+    value: 'Thiès',
+    label: 'Thiès'
+  },
 ];
 
 export const AccountProfileDetails = () => {
   const [values, setValues] = useState({
-    firstName: 'Anika',
-    lastName: 'Visser',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'los-angeles',
-    country: 'USA'
+    firstName: 'Pape Saliou',
+    lastName: 'KA',
+    email: 'papesaliouka@gmail.com',
+    phone: '+221 77 206 10 56',
+    state: 'Rufisque',
+    country: 'Senegal'
   });
 
   const handleChange = useCallback(
@@ -137,7 +145,8 @@ export const AccountProfileDetails = () => {
                   name="country"
                   onChange={handleChange}
                   required
-                  value={values.country}
+                  value={"Senegal"}
+                  contentEditable={false}
                 />
               </Grid>
               <Grid
@@ -146,7 +155,7 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
-                  label="Select State"
+                  label="Select Distric"
                   name="state"
                   onChange={handleChange}
                   required

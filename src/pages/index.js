@@ -34,24 +34,14 @@ const Page = () => (
         >
           <Grid
             xs={12}
-            sm={6}
-            lg={6}
+            sm={12}
+            lg={12}
           >
             <OverviewBudget
               difference={12}
               positive
               sx={{ height: '100%' }}
-              value="76 (hrs)"
-            />
-          </Grid>
-          <Grid
-            xs={12}
-            sm={6}
-            lg={6}
-          >
-            <OverviewTasksProgress
-              sx={{ height: '100%' }}
-              value={75.5}
+              value="26 (hrs)"
             />
           </Grid>
           <Grid
@@ -61,12 +51,12 @@ const Page = () => (
             <OverviewSales
               chartSeries={[
                 {
-                  name: 'This year',
-                  data: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20]
+                  name: 'This week',
+                  data: [18, 16, 5, 8, 3, 14, 14]
                 },
                 {
-                  name: 'Last year',
-                  data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13]
+                  name: 'Last week',
+                  data: [12, 11, 4, 6, 2, 9, 9 ]
                 }
               ]}
               sx={{ height: '100%' }}
