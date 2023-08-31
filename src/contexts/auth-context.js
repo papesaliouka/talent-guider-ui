@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
+import React, { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -12,107 +12,84 @@ const HANDLERS = {
 const initialState = {
   isAuthenticated: false,
   isLoading: true,
-  user: null
+  user: null,
 };
 
 const handlers = {
-  [HANDLERS.INITIALIZE]: (state, action) => {
-    const user = action.payload;
-
-    return {
-      ...state,
-      ...(
-        // if payload (user) is provided, then is authenticated
-        user
-          ? ({
-            isAuthenticated: true,
-            isLoading: false,
-            user
-          })
-          : ({
-            isLoading: false
-          })
-      )
-    };
-  },
-  [HANDLERS.SIGN_IN]: (state, action) => {
-    const user = action.payload;
-
-    return {
-      ...state,
-      isAuthenticated: true,
-      user
-    };
-  },
-  [HANDLERS.SIGN_OUT]: (state) => {
-    return {
-      ...state,
-      isAuthenticated: false,
-      user: null
-    };
-  }
+  [HANDLERS.INITIALIZE]: (state, action) => ({
+    ...state,
+    isAuthenticated: !!action.payload,
+    isLoading: false,
+    user: action.payload,
+  }),
+  [HANDLERS.SIGN_IN]: (state, action) => ({
+    ...state,
+    isAuthenticated: true,
+    user: action.payload,
+    isLoading: false,
+  }),
+  [HANDLERS.SIGN_OUT]: (state,action) =>({
+    ...state,
+    isAuthenticated:false,
+    user:action.payload,
+    isLoading:false
+  }),
 };
 
-const reducer = (state, action) => (
-  handlers[action.type] ? handlers[action.type](state, action) : state
-);
+const reducer = (state, action) =>
+  handlers[action.type] ? handlers[action.type](state, action) : state;
 
-// The role of this context is to propagate authentication state through the App tree.
+export const AuthContext = createContext(initialState);
 
-export const AuthContext = createContext({ undefined });
-
-export const AuthProvider = (props) => {
-  const { children } = props;
+export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const initialized = useRef(false);
+  
+  let initialRender = useRef(false);
 
   const initialize = async () => {
-    // Prevent from calling twice in development mode with React.StrictMode enabled
-    if (initialized.current) {
+  
+    if (initialRender.current) {
       return;
     }
 
-    initialized.current = true;
-    
-    let isAuthenticated = state.isAuthenticated;
+    initialRender.current = true;
 
     try {
       const response = await fetch(`${API_URL}/api/auth/check-session`, {
         method: 'GET',
-        credentials: 'include'
+        credentials: 'include',
       });
 
-      if (response.ok){
-        isAuthenticated = true;
-      }else{
-        throw new Error("Not authenticated")
+      if (response.ok) {
+        const {user} = await response.json();
+        console.log(user);
+        dispatch({
+          type: HANDLERS.INITIALIZE,
+          payload: user,
+        });
+      } else {
+        dispatch({
+          type: HANDLERS.INITIALIZE,
+          payload: null,
+        });
+        console.log('Not authenticated');
       }
-
     } catch (err) {
       console.error(err);
-    }
-
-    if (isAuthenticated) {
-
       dispatch({
-        type: HANDLERS.INITIALIZE,
-        payload: state.user
-      });
-    } else {
-      dispatch({
-        type: HANDLERS.INITIALIZE
+        type: HANDLERS.SIGN_OUT,
+        payload: null,
       });
     }
   };
 
-  useEffect(
-    () => {
-      initialize();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
-
+  useEffect(() => {
+    initialize();
+    return () => {
+      // Cleanup function to cancel ongoing tasks if component unmounts
+      // For example, you might cancel ongoing fetch requests here
+    };
+  }, []);
 
   const signIn = async (email, password) => {
 
@@ -182,7 +159,9 @@ export const AuthProvider = (props) => {
 
       if (response.ok){
         dispatch({
-          type: HANDLERS.SIGN_OUT
+          type: HANDLERS.SIGN_OUT,
+          payload: null
+
         });
       }else{
         throw new Error("Unable to logout");

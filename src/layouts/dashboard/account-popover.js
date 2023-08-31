@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect} from 'react';
 import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
 import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/material';
@@ -10,14 +10,15 @@ export const AccountPopover = (props) => {
   const auth = useAuth();
 
   const handleSignOut = useCallback(
-    () => {
+    async () => {
       onClose?.();
-      auth.signOut();
-      router.push('/auth/login');
+     await auth.signOut();
+     router.push('/auth/login');
     },
     [onClose, auth, router]
   );
-
+  
+  
 
   return (
     <Popover
@@ -43,7 +44,7 @@ export const AccountPopover = (props) => {
           color="text.secondary"
           variant="body2"
         >
-          {'Pape Saliou KA'}
+          { auth?.user && auth.user.email }
         </Typography>
       </Box>
       <Divider />

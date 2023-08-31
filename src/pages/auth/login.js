@@ -18,8 +18,9 @@ import {
 } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import {withNonAuthGuard} from 'src/hocs/with-non-auth-guard';
 
-const Page = () => {
+const Page = withNonAuthGuard(() => {
   const router = useRouter();
   const auth = useAuth();
   const [method, setMethod] = useState('email');
@@ -165,7 +166,7 @@ const Page = () => {
       </Box>
     </>
   );
-};
+});
 
 Page.getLayout = (page) => (
   <AuthLayout>
