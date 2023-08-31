@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
   SIGN_IN: 'SIGN_IN',
@@ -71,26 +73,30 @@ export const AuthProvider = (props) => {
     }
 
     initialized.current = true;
-
-    let isAuthenticated = false;
+    
+    let isAuthenticated = state.isAuthenticated;
 
     try {
-      isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true';
+      const response = await fetch(`${API_URL}/api/auth/check-session`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      if (response.ok){
+        isAuthenticated = true;
+      }else{
+        throw new Error("Not authenticated")
+      }
+
     } catch (err) {
       console.error(err);
     }
 
     if (isAuthenticated) {
-      const user = {
-        id: '5e86809283e28b96d2d38537',
-        avatar: '/assets/avatars/avatar-anika-visser.png',
-        name: 'Anika Visser',
-        email: 'anika.visser@devias.io'
-      };
 
       dispatch({
         type: HANDLERS.INITIALIZE,
-        payload: user
+        payload: state.user
       });
     } else {
       dispatch({
@@ -107,65 +113,93 @@ export const AuthProvider = (props) => {
     []
   );
 
-  const skip = () => {
-    try {
-      window.sessionStorage.setItem('authenticated', 'true');
-    } catch (err) {
-      console.error(err);
-    }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    };
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
-  };
 
   const signIn = async (email, password) => {
-    if (email !== 'demo@devias.io' || password !== 'Password123!') {
-      throw new Error('Please check your email and password');
-    }
 
     try {
-      window.sessionStorage.setItem('authenticated', 'true');
+      const response = await fetch(`${API_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          email,
+          password
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        dispatch({
+          type: HANDLERS.SIGN_IN,
+          payload: data.user
+        });
+      } else {
+        throw new Error('Please check your email and password');
+        
+      }
     } catch (err) {
       console.error(err);
     }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    };
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
   };
 
-  const signUp = async (email, name, password) => {
-    throw new Error('Sign up is not implemented');
+  const signUp = async (email, username, password) => {
+    try{
+      const response = await fetch(`${API_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          email,
+          username,
+          password
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        alert("User created successfully");
+      } else {
+        throw new Error('Please check your email and password');
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error creating user");
+    }
   };
 
-  const signOut = () => {
-    dispatch({
-      type: HANDLERS.SIGN_OUT
-    });
+  const signOut =async () => {
+
+    try{
+      const response = await fetch(`${API_URL}/api/auth/logout`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (response.ok){
+        dispatch({
+          type: HANDLERS.SIGN_OUT
+        });
+      }else{
+        throw new Error("Unable to logout");
+      }
+
+
+    }catch(err){
+      console.log(err);
+      alert('something went wrong')
+    }
+
   };
 
   return (
     <AuthContext.Provider
       value={{
         ...state,
-        skip,
         signIn,
         signUp,
         signOut
