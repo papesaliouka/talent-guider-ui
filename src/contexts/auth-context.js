@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-const API_URL = process.env.API_URL 
+const API_URL = process.env.NEXT_PUBLIC_API_URL 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
   SIGN_IN: 'SIGN_IN',
