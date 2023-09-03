@@ -11,8 +11,6 @@ import {
   FormHelperText,
   Link,
   Stack,
-  Tab,
-  Tabs,
   TextField,
   Typography
 } from '@mui/material';
@@ -23,19 +21,17 @@ import {withNonAuthGuard} from 'src/hocs/with-non-auth-guard';
 const Page = withNonAuthGuard(() => {
   const router = useRouter();
   const auth = useAuth();
-  const [method, setMethod] = useState('email');
   const formik = useFormik({
     initialValues: {
-      email: 'papesaliouka@gmail.com',
+      email: '',
       password: "",
       submit: null
     },
     validationSchema: Yup.object({
       email: Yup
         .string()
-        .email('Must be a valid email')
         .max(255)
-        .required('Email is required'),
+        .required('Email/Username is required'),
       password: Yup
         .string()
         .max(255)
@@ -112,7 +108,7 @@ const Page = withNonAuthGuard(() => {
                     error={!!(formik.touched.email && formik.errors.email)}
                     fullWidth
                     helperText={formik.touched.email && formik.errors.email}
-                    label="Email Address"
+                    label="Email Address/Username"
                     name="email"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}

@@ -12,7 +12,7 @@ import {makeTriplles,
   makeDurationBySubject,
   makeTraffic} from 'src/utils/overview-helpers';
 
-const API_URL = 'http://localhost:8000/api/tasks';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
 
 
@@ -23,7 +23,7 @@ const Page = () =>{
     const [categories, setCategories] = useState([]);
     const [totalHours, setTotalHours] = useState(0);
     const [traffic, setTraffic] = useState([]);
-
+    const [logEntries, setLogEntries] = useState(0);
   
   const isMountedRef = useRef(null);
 
@@ -34,7 +34,7 @@ const Page = () =>{
     isMountedRef.current = true;
     const fetchData = async () =>{
       try{
-        const res = await fetch(API_URL, {
+        const res = await fetch(`${API_URL}/api/tasks`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -51,6 +51,9 @@ const Page = () =>{
         const durations = json[0].durations;
         const subjectNames = json[0].subjectNames;
         const dates = json[0].date;
+
+        setLogEntries(days.length);
+
         
         const tripples = makeTriplles(days, durations, subjectNames, dates);
 
@@ -113,7 +116,7 @@ const Page = () =>{
           >
           <Overview
               sx={{ height: '100%' }}
-              value={14}
+              value={logEntries}
               difference={0}
               title="Logs Entries (past 7 days)"
             />

@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }) => {
         },
         credentials: 'include',
         body: JSON.stringify({
-          email,
+          identifier: email,
           password
         })
       });
@@ -113,7 +113,7 @@ export const AuthProvider = ({ children }) => {
           payload: data.user
         });
       } else {
-        throw new Error('Please check your email and password');
+        throw new Error('Please check your email/username and password');
         
       }
     } catch (err) {

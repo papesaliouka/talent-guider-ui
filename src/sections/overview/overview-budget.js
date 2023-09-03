@@ -36,8 +36,8 @@ export const Overview = (props) => {
               width: 56
             }}
           >
-            <SvgIcon>
-            {difference ==0 ? <ListBulletIcon />: <ClockIcon/>}
+            <SvgIcon >
+            {difference ==0 ? <ListBulletIcon  />: <ClockIcon/>}
             </SvgIcon>
           </Avatar>
         </Stack>

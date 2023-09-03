@@ -65,6 +65,8 @@ export const OverviewTraffic = (props) => {
   return (
     <Card sx={sx}>
       <CardHeader title="Subjects Overview" />
+      { chartSeries >0 ? (
+
       <CardContent>
         <Chart
           height={300}
@@ -107,6 +109,18 @@ export const OverviewTraffic = (props) => {
           })}
         </Stack>
       </CardContent>
+      ):(
+        <CardContent>
+          <Typography
+            color="text.secondary"
+            variant="h6"
+          >
+            No data to display yet 
+          </Typography>
+        </CardContent>
+      )
+      }
+    
     </Card>
   );
 };

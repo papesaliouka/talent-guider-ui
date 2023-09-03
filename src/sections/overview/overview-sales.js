@@ -8,7 +8,8 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  SvgIcon
+  SvgIcon,
+  Typography
 } from '@mui/material';
 import { alpha, useTheme } from '@mui/material/styles';
 import { Chart } from 'src/components/chart';
@@ -100,7 +101,9 @@ export const OverviewSales = (props) => {
       <CardHeader
         title="Trends"
       />
-      <CardContent>
+    {chartSeries[0].data.length > 0 ?
+
+      (<CardContent>
         <Chart
           height={350}
           options={chartOptions}
@@ -109,6 +112,17 @@ export const OverviewSales = (props) => {
           width="100%"
         />
       </CardContent>
+      ):(
+        <CardContent>
+          <Typography
+            color="textSecondary"
+            variant="h6"
+          >
+            No data to display
+          </Typography>
+        </CardContent>  
+      )
+    }
     </Card>
   );
 };
