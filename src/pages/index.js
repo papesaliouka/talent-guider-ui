@@ -1,19 +1,82 @@
 import Head from 'next/head';
-import { subDays, subHours } from 'date-fns';
 import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { OverviewBudget } from 'src/sections/overview/overview-budget';
-import { OverviewLatestOrders } from 'src/sections/overview/overview-latest-orders';
-import { OverviewLatestProducts } from 'src/sections/overview/overview-latest-products';
+import { Overview } from 'src/sections/overview/overview-budget';
 import { OverviewSales } from 'src/sections/overview/overview-sales';
-import { OverviewTasksProgress } from 'src/sections/overview/overview-tasks-progress';
-import { OverviewTotalCustomers } from 'src/sections/overview/overview-total-customers';
-import { OverviewTotalProfit } from 'src/sections/overview/overview-total-profit';
 import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
+import {useEffect, useState, useRef} from 'react';
 
-const now = new Date();
+import {makeTriplles,
+  makeDurationsByDay,
+  makeChartSeriesAndCategories,
+  makeDurationBySubject,
+  makeTraffic} from 'src/utils/overview-helpers';
 
-const Page = () => (
+const API_URL = 'http://localhost:8000/api/tasks';
+
+
+
+const Page = () =>{
+  
+
+    const [chartSeries, setChartSeries] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [totalHours, setTotalHours] = useState(0);
+    const [traffic, setTraffic] = useState([]);
+
+  
+  const isMountedRef = useRef(null);
+
+  useEffect(() =>{
+    if (isMountedRef.current){
+      return;
+    }
+    isMountedRef.current = true;
+    const fetchData = async () =>{
+      try{
+        const res = await fetch(API_URL, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            },
+          credentials: 'include'
+        });
+        const json = await res.json();
+        if (!json){
+          return;
+        }
+        setTotalHours(Math.round(json[0].totalOfWeek/60));
+
+        const days= json[0].days;
+        const durations = json[0].durations;
+        const subjectNames = json[0].subjectNames;
+        const dates = json[0].date;
+        
+        const tripples = makeTriplles(days, durations, subjectNames, dates);
+
+        const durationsByDay = makeDurationsByDay(tripples);
+
+        const {chartSeries,categories} = makeChartSeriesAndCategories(durationsByDay);
+        setChartSeries(chartSeries);
+
+        setCategories(categories);
+        
+        const durationBySubject = makeDurationBySubject(tripples);
+
+        const traffic = makeTraffic(durationBySubject);
+        setTraffic(traffic);
+
+
+        return
+      }catch (err){
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, []);
+
+
+  return( 
   <>
     <Head>
       <title>
@@ -35,38 +98,56 @@ const Page = () => (
           <Grid
             xs={12}
             sm={12}
-            lg={12}
+            lg={6}
           >
-            <OverviewBudget
-              difference={12}
-              positive
+            <Overview
               sx={{ height: '100%' }}
-              value="26 (hrs)"
+              value={totalHours}
+              difference={1}
             />
           </Grid>
           <Grid
             xs={12}
-            lg={12}
+            sm={12}
+            lg={6}
+          >
+          <Overview
+              sx={{ height: '100%' }}
+              value={14}
+              difference={0}
+              title="Logs Entries (past 7 days)"
+            />
+          </Grid>
+          <Grid
+            xs={12}
+            lg={6}
           >
             <OverviewSales
               chartSeries={[
                 {
-                  name: 'This week',
-                  data: [18, 16, 5, 8, 3, 14, 14]
-                },
-                {
-                  name: 'Last week',
-                  data: [12, 11, 4, 6, 2, 9, 9 ]
+                  name: 'Hours',
+                  data: chartSeries
                 }
               ]}
               sx={{ height: '100%' }}
+              categories={categories}
+            />
+          </Grid>
+          <Grid
+            xs={12}
+            lg={6}
+          >
+            <OverviewTraffic
+                traffic={traffic} 
+                sx={{ height: '100%' }} 
             />
           </Grid>
         </Grid>
       </Container>
     </Box>
   </>
-);
+)
+};
 
 Page.getLayout = (page) => (
   <DashboardLayout>

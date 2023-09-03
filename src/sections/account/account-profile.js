@@ -1,11 +1,8 @@
 import {
   Avatar,
   Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
-  Divider,
   Typography
 } from '@mui/material';
 
@@ -47,12 +44,6 @@ export const AccountProfile = () => (
           variant="body2"
         >
           {user.city} {user.country}
-        </Typography>
-        <Typography
-          color="text.secondary"
-          variant="body2"
-        >
-          {user.timezone}
         </Typography>
       </Box>
     </CardContent>
