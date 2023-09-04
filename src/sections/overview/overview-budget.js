@@ -7,7 +7,7 @@ import ClockIcon from '@heroicons/react/24/solid/ClockIcon';
 import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from '@mui/material';
 
 export const Overview = (props) => {
-  const { title="Total Hours Worked (past 7 days)",difference, positive = false, sx, value } = props;
+  const { clock ,title="Total Hours Worked (past 7 days)",difference, positive = false, sx, value } = props;
 
   return (
     <Card sx={sx}>
@@ -31,16 +31,49 @@ export const Overview = (props) => {
           </Stack>
           <Avatar
             sx={{
-              backgroundColor: 'error.main',
+              backgroundColor: !clock ? 'error.main': 'success.main',
               height: 56,
               width: 56
             }}
           >
             <SvgIcon >
-            {difference ==0 ? <ListBulletIcon  />: <ClockIcon/>}
+            {!clock? <ListBulletIcon  />: <ClockIcon/>}
             </SvgIcon>
           </Avatar>
         </Stack>
+        {difference && (
+          <Stack
+            alignItems="center"
+            direction="row"
+            spacing={2}
+            sx={{ mt: 2 }}
+          >
+            <Stack
+              alignItems="center"
+              direction="row"
+              spacing={0.5}
+            >
+              <SvgIcon
+                color={positive ? 'success' : 'error'}
+                fontSize="small"
+              >
+                {positive ? <ArrowUpIcon /> : <ArrowDownIcon />}
+              </SvgIcon>
+              <Typography
+                color={positive ? 'success.main' : 'error.main'}
+                variant="body2"
+              >
+                {difference}%
+              </Typography>
+            </Stack>
+            <Typography
+              color="text.secondary"
+              variant="caption"
+            >
+              Since last week
+            </Typography>
+          </Stack>
+        )}
         
       </CardContent>
     </Card>

@@ -24,6 +24,8 @@ const Page = () =>{
     const [thisWeeklogEntries, setThisWeekLogEntries] = useState(0);
     
     const [lastWeekchartSeries, setLastWeekChartSeries] = useState([]);
+    const [lastWeekTotalHours, setLastWeekTotalHours] = useState(0);
+    const [lastWeekLogEntries, setLastWeekLogEntries] = useState(0);
     
   
     const initialRender = useRef(false);
@@ -55,7 +57,6 @@ const Page = () =>{
           return;
         }
         
-        console.log(json);
 
         if (json.length === 1){
           const totalOfWeek = json[0].totalOfWeek;
@@ -88,7 +89,9 @@ const Page = () =>{
 
 
           const totalOfLastWeek = json[1].totalOfWeek;
+          setLastWeekTotalHours(Math.round(totalOfLastWeek/60));
           const logEntriesOfLastWeek = json[1].days.length;
+          setLastWeekLogEntries(logEntriesOfLastWeek);
           const tripplesOfLastWeek = makeTriplles(json[1].days, json[1].durations, json[1].subjectNames, json[1].date);
           const durationsByDayOfLastWeek = makeDurationsByDay(tripplesOfLastWeek);
           const {chartSeries: chartSeriesOfLastWeek} = makeChartSeriesAndCategories(durationsByDayOfLastWeek);
@@ -134,8 +137,10 @@ const Page = () =>{
             <Overview
               sx={{ height: '100%' }}
               value={thisWeekTotalHours}
-              difference={1}
+              difference={thisWeekTotalHours - lastWeekTotalHours}
               title="Total Hours (This Week)"
+              positive={thisWeekTotalHours > lastWeekTotalHours}
+              clock
             />
           </Grid>
           <Grid
@@ -146,8 +151,9 @@ const Page = () =>{
           <Overview
               sx={{ height: '100%' }}
               value={thisWeeklogEntries}
-              difference={0}
+              difference={thisWeeklogEntries - lastWeekLogEntries}
               title="Logs Entries (This Week)"
+              positive={thisWeeklogEntries > lastWeekLogEntries }
             />
           </Grid>
           <Grid
