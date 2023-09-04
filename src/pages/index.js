@@ -24,8 +24,16 @@ const Page = () =>{
     const [traffic, setTraffic] = useState([]);
     const [logEntries, setLogEntries] = useState(0);
   
+    const initialRender = useRef(false);
 
   useEffect(() =>{
+
+    if (initialRender.current) {
+      return;
+    }
+
+    initialRender.current = true;
+
     const fetchData = async () =>{
       try{
         const res = await fetch(`${API_URL}/api/tasks`, {

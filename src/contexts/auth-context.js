@@ -51,6 +51,11 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
+    if (state.isAuthenticated) {
+      return;
+    }
+
+
     initialRender.current = true;
 
     try {
