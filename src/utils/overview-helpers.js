@@ -71,7 +71,7 @@ export const makeTraffic = (durationBySubject) => {
   for (let subject in durationBySubject) {
     result.push({
       subject: subject,
-      duration: Math.floor(durationBySubject[subject] / 60)
+      duration: Math.round(durationBySubject[subject] / 60)
     });
   }
   return result;
