@@ -71,7 +71,7 @@ const Page = () =>{
 
         if (json.length === 2){
           json = json.sort((a, b) => {
-            return b._id - a._i;
+            return  a._id - b._id;
           });
           const totalOfWeek = json[0].totalOfWeek;
           setThisWeekTotalHours(Math.round(totalOfWeek/60));
@@ -154,14 +154,14 @@ const Page = () =>{
             <OverviewSales
               chartSeries={[
                 {
+                  name: 'Last Week',
+                  data: lastWeekchartSeries
+                },
+                {
                   name: 'This Week',
                   data: thisWeekchartSeries
                 }
-              ,{
-                name: 'Last Week',
-                data: lastWeekchartSeries
-              }]
-              }
+              ]}
               sx={{ height: '100%' }}
             />
           </Grid>
