@@ -54,6 +54,8 @@ const Page = () =>{
         if (json.length === 0){
           return;
         }
+        
+        console.log(json);
 
         if (json.length === 1){
           const totalOfWeek = json[0].totalOfWeek;
@@ -133,6 +135,7 @@ const Page = () =>{
               sx={{ height: '100%' }}
               value={thisWeekTotalHours}
               difference={1}
+              title="Total Hours (This Week)"
             />
           </Grid>
           <Grid
@@ -144,7 +147,7 @@ const Page = () =>{
               sx={{ height: '100%' }}
               value={thisWeeklogEntries}
               difference={0}
-              title="Logs Entries (past 7 days)"
+              title="Logs Entries (This Week)"
             />
           </Grid>
           <Grid

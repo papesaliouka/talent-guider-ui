@@ -42,13 +42,11 @@ export const makeChartSeriesAndCategories = (durationsByDay) => {
   });
 
 
-  const chartSeries  = [];
-  const categories = [];
+  const chartSeries  = [0,0,0,0,0,0,0];
   for (let i = 0; i < sortedResult.length; i++) {
-    chartSeries.push(sortedResult[i].duration/60);
-    categories.push(numDaysMap[sortedResult[i].day]);
+    chartSeries[sortedResult[i].day-1]=sortedResult[i].duration/60;
   }
-  return {chartSeries,categories}
+  return {chartSeries}
 };
 
 
