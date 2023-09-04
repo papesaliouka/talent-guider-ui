@@ -71,7 +71,7 @@ const Page = () =>{
 
         if (json.length === 2){
           json = json.sort((a, b) => {
-            return  a._id - b._id;
+            return b._id - a._id;
           });
           const totalOfWeek = json[0].totalOfWeek;
           setThisWeekTotalHours(Math.round(totalOfWeek/60));
