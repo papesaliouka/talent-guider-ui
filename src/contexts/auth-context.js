@@ -61,7 +61,6 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const {user} = await response.json();
-        console.log(user);
         dispatch({
           type: HANDLERS.INITIALIZE,
           payload: user,
@@ -137,7 +136,6 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         alert("User created successfully");
       } else {
         throw new Error('Please check your email and password');

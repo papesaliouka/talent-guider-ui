@@ -48,6 +48,7 @@ const Page = () =>{
 
         setLogEntries(days.length);
 
+        console.log(json[0]);
         
         const tripples = makeTriplles(days, durations, subjectNames, dates);
 
