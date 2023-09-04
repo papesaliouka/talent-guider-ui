@@ -65,7 +65,7 @@ export const OverviewTraffic = (props) => {
   return (
     <Card sx={sx}>
       <CardHeader title="Subjects Overview" />
-      { chartSeries >0 ? (
+      { chartSeries.length >0 ? (
 
       <CardContent>
         <Chart

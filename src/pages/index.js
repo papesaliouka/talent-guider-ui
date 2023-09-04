@@ -24,13 +24,8 @@ const Page = () =>{
     const [traffic, setTraffic] = useState([]);
     const [logEntries, setLogEntries] = useState(0);
   
-  const isMountedRef = useRef(null);
 
   useEffect(() =>{
-    if (isMountedRef.current){
-      return;
-    }
-    isMountedRef.current = true;
     const fetchData = async () =>{
       try{
         const res = await fetch(`${API_URL}/api/tasks`, {
