@@ -17,7 +17,6 @@ import {
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import {withNonAuthGuard} from 'src/hocs/with-non-auth-guard';
-import CookieConsentPopup from 'src/components/cookie-consent-popup';
 
 const Page = withNonAuthGuard(() => {
   const router = useRouter();
@@ -161,7 +160,6 @@ const Page = withNonAuthGuard(() => {
           </div>
         </Box>
       </Box>
-    <CookieConsentPopup />
     </>
   );
 });

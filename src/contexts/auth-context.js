@@ -111,6 +111,10 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
+        const cookieHeader = response.headers.get('set-cookie');
+        document.cookie = cookieHeader;
+
+
         dispatch({
           type: HANDLERS.SIGN_IN,
           payload: data.user

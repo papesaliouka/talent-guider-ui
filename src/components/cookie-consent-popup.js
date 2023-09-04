@@ -23,6 +23,7 @@ const classes = {
   },
 };
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 function CookieConsentPopup() {
   
@@ -46,7 +47,7 @@ function CookieConsentPopup() {
 
   // Function to handle accepting cookies.
   const acceptCookies = () => {
-    setCookie("cookieConsent", "accepted", 365); // Set the cookie for 1 year.
+    setCookie("sid", API_URL, 365); // Set the cookie for 1 year.
     setShowPopup(false); // Hide the popup.
   };
 
