@@ -47,17 +47,18 @@ const Page = () =>{
         if (!json){
           return;
         }
-        setTotalHours(Math.round(json[0].totalOfWeek/60));
 
-        const days= json[0].days;
-        const durations = json[0].durations;
-        const subjectNames = json[0].subjectNames;
-        const dates = json[0].date;
+
+        const totalOfWeek = json.reduce((acc, curr) => acc + curr.totalOfWeek, 0);
+        setTotalHours(Math.round(totalOfWeek/60));
+
+        const days= json.map((item) => item.days).flat();
+        const durations = json.map((item) => item.durations).flat();
+        const subjectNames = json.map((item) => item.subjectNames).flat();
+        const dates = json.map((item) => item.date).flat();
 
         setLogEntries(days.length);
 
-        console.log(json[0]);
-        
         const tripples = makeTriplles(days, durations, subjectNames, dates);
 
         const durationsByDay = makeDurationsByDay(tripples);
@@ -66,14 +67,13 @@ const Page = () =>{
         setChartSeries(chartSeries);
 
         setCategories(categories);
-        
+
         const durationBySubject = makeDurationBySubject(tripples);
 
         const traffic = makeTraffic(durationBySubject);
         setTraffic(traffic);
+        return;
 
-
-        return
       }catch (err){
         console.log(err);
       }
