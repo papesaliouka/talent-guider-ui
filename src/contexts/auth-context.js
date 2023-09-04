@@ -111,10 +111,6 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
-        const cookieHeader = response.headers.get('set-cookie');
-        document.cookie = `sid=${cookieHeader}`;
-
-
         dispatch({
           type: HANDLERS.SIGN_IN,
           payload: data.user
@@ -144,7 +140,6 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         alert("User created successfully");
       } else {
         throw new Error('Please check your email and password');
