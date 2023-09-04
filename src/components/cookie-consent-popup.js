@@ -2,18 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { makeStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) => ({
+const classes = {
   cookieConsent: {
     backgroundColor: 'black',
     color: '#fff',
     textAlign: 'center',
-    padding: theme.spacing(2), // Adjust spacing as needed
+    padding: '16px', // Adjust spacing as needed
   },
   cookieContent: {
     maxWidth: '600px',
-    margin: ' auto',
+    margin: '0 auto',
   },
   acceptButton: {
     backgroundColor: '#4CAF50',
@@ -22,13 +21,11 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#388E3C',
     },
   },
-}));
-
+};
 
 
 function CookieConsentPopup() {
   
-  const classes = useStyles();
   const [showPopup, setShowPopup] = useState(false);
 
   // Function to set a cookie with a specified name and value.
