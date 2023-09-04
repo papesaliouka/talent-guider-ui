@@ -154,13 +154,13 @@ const Page = () =>{
             <OverviewSales
               chartSeries={[
                 {
+                  name: 'This Week',
+                  data: thisWeekchartSeries
+                },
+                {
                   name: 'Last Week',
                   data: lastWeekchartSeries
                 },
-                {
-                  name: 'This Week',
-                  data: thisWeekchartSeries
-                }
               ]}
               sx={{ height: '100%' }}
             />
