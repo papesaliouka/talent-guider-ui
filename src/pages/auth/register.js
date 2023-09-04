@@ -27,7 +27,7 @@ const Page = withNonAuthGuard(() => {
       username: Yup
         .string()
         .max(255)
-        .required('Name is required'),
+        .required('Gitea username is required'),
       password: Yup
         .string()
         .max(255)
@@ -98,9 +98,9 @@ const Page = withNonAuthGuard(() => {
             >
               <Stack spacing={3}>
                 <TextField
-                  error={!!(formik.touched.name && formik.errors.name)}
+                  error={!!(formik.touched.username && formik.errors.username)}
                   fullWidth
-                  helperText={formik.touched.name && formik.errors.name}
+                  helperText={formik.touched.username && formik.errors.username}
                   label="gitea username"
                   name="username"
                   onBlur={formik.handleBlur}

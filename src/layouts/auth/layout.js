@@ -88,7 +88,7 @@ export const Layout = (props) => {
                 sx={{ color: '#15B79E' }}
                 target="_blank"
               >
-                Talent Guider
+                Talent Guider UI
               </Box>
             </Typography>
             <Typography
@@ -96,7 +96,7 @@ export const Layout = (props) => {
               sx={{ mb: 3 }}
               variant="subtitle1"
             >
-              Here you can plan your projects and manage your time.
+              Here you can visualize your data.
             </Typography>
           </Box>
         </Grid>
