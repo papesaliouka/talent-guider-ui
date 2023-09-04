@@ -72,7 +72,15 @@ const useChartOptions = (categories) => {
         color: theme.palette.divider,
         show: true
       },
-      categories:categories, 
+      categories:[
+        'Mon',
+        'Tue',
+        'Wed',
+        'Thu',
+        'Fri',
+        'Sat',
+        'Sun'
+      ], 
       labels: {
         offsetY: 5,
         style: {
@@ -93,8 +101,8 @@ const useChartOptions = (categories) => {
 };
 
 export const OverviewSales = (props) => {
-  const { chartSeries, sx,categories } = props;
-  const chartOptions = useChartOptions(categories);
+  const { chartSeries, sx } = props;
+  const chartOptions = useChartOptions();
 
   return (
     <Card sx={sx}>

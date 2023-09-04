@@ -18,11 +18,13 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
 const Page = () =>{
   
 
-    const [chartSeries, setChartSeries] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [totalHours, setTotalHours] = useState(0);
-    const [traffic, setTraffic] = useState([]);
-    const [logEntries, setLogEntries] = useState(0);
+    const [thisWeekchartSeries, setThisWeekChartSeries] = useState([]);
+    const [thisWeekTotalHours, setThisWeekTotalHours] = useState(0);
+    const [thisWeektraffic, setThisWeekTraffic] = useState([]);
+    const [thisWeeklogEntries, setThisWeekLogEntries] = useState(0);
+    
+    const [lastWeekchartSeries, setLastWeekChartSeries] = useState([]);
+    
   
     const initialRender = useRef(false);
 
@@ -43,36 +45,57 @@ const Page = () =>{
             },
           credentials: 'include'
         });
-        const json = await res.json();
+        let json = await res.json();
         if (!json){
           return;
         }
 
+        
+        if (json.length === 0){
+          return;
+        }
 
-        const totalOfWeek = json.reduce((acc, curr) => acc + curr.totalOfWeek, 0);
-        setTotalHours(Math.round(totalOfWeek/60));
+        if (json.length === 1){
+          const totalOfWeek = json[0].totalOfWeek;
+          setThisWeekTotalHours(Math.round(totalOfWeek/60));
+          setThisWeekLogEntries(json[0].days.length);
+          const tripples = makeTriplles(json[0].days, json[0].durations, json[0].subjectNames, json[0].date);
+          const durationsByDay = makeDurationsByDay(tripples);
+          const {chartSeries} = makeChartSeriesAndCategories(durationsByDay);
+          setThisWeekChartSeries(chartSeries);
+          const durationBySubject = makeDurationBySubject(tripples);
+          const traffic = makeTraffic(durationBySubject);
+          setThisWeekTraffic(traffic);
+          return;
+        }
 
-        const days= json.map((item) => item.days).flat();
-        const durations = json.map((item) => item.durations).flat();
-        const subjectNames = json.map((item) => item.subjectNames).flat();
-        const dates = json.map((item) => item.date).flat();
+        if (json.length === 2){
+          json = json.sort((a, b) => {
+            return b._id - a._i;
+          });
+          const totalOfWeek = json[0].totalOfWeek;
+          setThisWeekTotalHours(Math.round(totalOfWeek/60));
+          setThisWeekLogEntries(json[0].days.length);
+          const tripples = makeTriplles(json[0].days, json[0].durations, json[0].subjectNames, json[0].date);
+          const durationsByDay = makeDurationsByDay(tripples);
+          const {chartSeries} = makeChartSeriesAndCategories(durationsByDay);
+          setThisWeekChartSeries(chartSeries);
+          const durationBySubject = makeDurationBySubject(tripples);
+          const traffic = makeTraffic(durationBySubject);
+          setThisWeekTraffic(traffic);
 
-        setLogEntries(days.length);
 
-        const tripples = makeTriplles(days, durations, subjectNames, dates);
+          const totalOfLastWeek = json[1].totalOfWeek;
+          const logEntriesOfLastWeek = json[1].days.length;
+          const tripplesOfLastWeek = makeTriplles(json[1].days, json[1].durations, json[1].subjectNames, json[1].date);
+          const durationsByDayOfLastWeek = makeDurationsByDay(tripplesOfLastWeek);
+          const {chartSeries: chartSeriesOfLastWeek} = makeChartSeriesAndCategories(durationsByDayOfLastWeek);
+          setLastWeekChartSeries(chartSeriesOfLastWeek);
+          return;
+        }
 
-        const durationsByDay = makeDurationsByDay(tripples);
 
-        const {chartSeries,categories} = makeChartSeriesAndCategories(durationsByDay);
-        setChartSeries(chartSeries);
-
-        setCategories(categories);
-
-        const durationBySubject = makeDurationBySubject(tripples);
-
-        const traffic = makeTraffic(durationBySubject);
-        setTraffic(traffic);
-        return;
+        
 
       }catch (err){
         console.log(err);
@@ -108,7 +131,7 @@ const Page = () =>{
           >
             <Overview
               sx={{ height: '100%' }}
-              value={totalHours}
+              value={thisWeekTotalHours}
               difference={1}
             />
           </Grid>
@@ -119,7 +142,7 @@ const Page = () =>{
           >
           <Overview
               sx={{ height: '100%' }}
-              value={logEntries}
+              value={thisWeeklogEntries}
               difference={0}
               title="Logs Entries (past 7 days)"
             />
@@ -131,12 +154,15 @@ const Page = () =>{
             <OverviewSales
               chartSeries={[
                 {
-                  name: 'Hours',
-                  data: chartSeries
+                  name: 'This Week',
+                  data: thisWeekchartSeries
                 }
-              ]}
+              ,{
+                name: 'Last Week',
+                data: lastWeekchartSeries
+              }]
+              }
               sx={{ height: '100%' }}
-              categories={categories}
             />
           </Grid>
           <Grid
@@ -144,7 +170,7 @@ const Page = () =>{
             lg={6}
           >
             <OverviewTraffic
-                traffic={traffic} 
+                traffic={thisWeektraffic} 
                 sx={{ height: '100%' }} 
             />
           </Grid>
