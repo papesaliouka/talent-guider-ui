@@ -94,7 +94,7 @@ export const Overview = (props) => {
                 color={positive ? 'success.main' : 'error.main'}
                 variant="body2"
               >
-                {difference}%
+                {Math.round(difference/value)*100}%
               </Typography>
             </Stack>
             <Typography

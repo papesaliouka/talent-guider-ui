@@ -4,6 +4,7 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { Overview } from 'src/sections/overview/overview-budget';
 import { OverviewSales } from 'src/sections/overview/overview-sales';
 import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
+import {OverviewTasksProgress  } from 'src/sections/overview/overview-tasks-progress';
 import {useEffect, useState, useRef} from 'react';
 
 import {makeTriplles,
@@ -166,7 +167,7 @@ const Page = () =>{
           <Grid
             xs={12}
             sm={12}
-            lg={4}
+            lg={3}
           >
             <Overview
               sx={{ height: '100%' }}
@@ -180,7 +181,7 @@ const Page = () =>{
           <Grid
             xs={12}
             sm={12}
-            lg={4}
+            lg={3}
           >
           <Overview
               sx={{ height: '100%' }}
@@ -194,7 +195,7 @@ const Page = () =>{
           <Grid      
             xs={12}
             sm={12}
-            lg={4}
+            lg={3}
           >
           <Overview
               sx={{ height: '100%' }}
@@ -205,10 +206,21 @@ const Page = () =>{
               mail
             />
           </Grid>
+          <Grid
+            xs={12}
+            sm={12}
+            lg={3}
+          >
+            <OverviewTasksProgress
+              sx={{ height: '100%' }}
+              value={thisWeekTotalHours}
+            />
+            
+          </Grid> 
 
           <Grid
             xs={12}
-            lg={6}
+            lg={7}
           >
             <OverviewSales
               chartSeries={[
@@ -226,7 +238,7 @@ const Page = () =>{
           </Grid>
           <Grid
             xs={12}
-            lg={6}
+            lg={5}
           >
             <OverviewTraffic
                 traffic={thisWeektraffic} 
