@@ -102,7 +102,7 @@ export const OverviewTraffic = (props) => {
                   color="text.secondary"
                   variant="subtitle2"
                 >
-                  {duration}
+                  {Math.round(duration)}
                 </Typography>
               </Box>
             );

@@ -3,11 +3,12 @@ import ArrowDownIcon from '@heroicons/react/24/solid/ArrowDownIcon';
 import ArrowUpIcon from '@heroicons/react/24/solid/ArrowUpIcon';
 import CurrencyDollarIcon from '@heroicons/react/24/solid/CurrencyDollarIcon';
 import ListBulletIcon from '@heroicons/react/24/solid/ListBulletIcon';
+import BookOpenIcon from '@heroicons/react/24/solid/BookOpenIcon';
 import ClockIcon from '@heroicons/react/24/solid/ClockIcon';
 import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from '@mui/material';
 
 export const Overview = (props) => {
-  const { clock ,title="Total Hours Worked (past 7 days)",difference, positive = false, sx, value } = props;
+  const { clock,list,mail ,title,difference, positive = false, sx, value } = props;
 
   return (
     <Card sx={sx}>
@@ -25,23 +26,53 @@ export const Overview = (props) => {
             >
               {title}
             </Typography>
+          {value>0 && (
             <Typography variant="h4">
               {value}
             </Typography>
+          )}
           </Stack>
+        {clock &&
           <Avatar
             sx={{
-              backgroundColor: !clock ? 'error.main': 'success.main',
+              backgroundColor: 'error.main',
               height: 56,
               width: 56
             }}
           >
             <SvgIcon >
-            {!clock? <ListBulletIcon  />: <ClockIcon/>}
+              <ClockIcon/>
             </SvgIcon>
           </Avatar>
+        }
+        {list &&
+          <Avatar
+            sx={{
+              backgroundColor: 'success.main',
+              height: 56,
+              width: 56
+            }}
+          >
+            <SvgIcon >
+              <ListBulletIcon/>
+            </SvgIcon>
+          </Avatar>
+        }
+        {mail &&
+          <Avatar
+            sx={{
+              backgroundColor: 'warning.main',
+              height: 56,
+              width: 56
+            }}
+          >
+            <SvgIcon >
+              <BookOpenIcon/>
+            </SvgIcon>
+          </Avatar>
+        }
         </Stack>
-        {difference && (
+        {!!difference ? (
           <Stack
             alignItems="center"
             direction="row"
@@ -73,7 +104,18 @@ export const Overview = (props) => {
               Since last week
             </Typography>
           </Stack>
-        )}
+        )
+          :
+          <Typography
+            color="text.secondary"
+            variant="caption"
+          >
+            No Data to Display
+            please start logging your hours
+            and make sure you setup the webhook
+          </Typography>
+        }
+        
         
       </CardContent>
     </Card>

@@ -27,6 +27,8 @@ const Page = () =>{
     const [lastWeekTotalHours, setLastWeekTotalHours] = useState(0);
     const [lastWeekLogEntries, setLastWeekLogEntries] = useState(0);
     
+    const [thisWeekCommits, setThisWeekCommits] = useState(0);
+    const [lastWeekCommits, setLastWeekCommits] = useState(0);
   
     const initialRender = useRef(false);
 
@@ -106,7 +108,39 @@ const Page = () =>{
         console.log(err);
       }
     };
-    fetchData();
+
+    const fetchCommits = async () =>{
+        try{
+          const res = await fetch(`${API_URL}/api/commits`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              },
+            credentials: 'include'
+          });
+          let json = await res.json();
+          if (!json){
+            return;
+          }
+          if (json.length === 0){
+            return;
+          }
+          if (json.length === 1){
+            setThisWeekCommits(json[0].total);
+            return;
+          }
+          if (json.length === 2){
+            setThisWeekCommits(json[0].total);
+            setLastWeekCommits(json[1].total);
+            return;
+          }
+        }catch (err){
+          console.log(err);
+        }
+    };
+
+    Promise.all([fetchData(), fetchCommits()]);
+
   }, []);
 
 
@@ -132,7 +166,7 @@ const Page = () =>{
           <Grid
             xs={12}
             sm={12}
-            lg={6}
+            lg={4}
           >
             <Overview
               sx={{ height: '100%' }}
@@ -146,7 +180,7 @@ const Page = () =>{
           <Grid
             xs={12}
             sm={12}
-            lg={6}
+            lg={4}
           >
           <Overview
               sx={{ height: '100%' }}
@@ -154,8 +188,24 @@ const Page = () =>{
               difference={thisWeeklogEntries - lastWeekLogEntries}
               title="Logs Entries (This Week)"
               positive={thisWeeklogEntries > lastWeekLogEntries }
+              list
             />
           </Grid>
+          <Grid      
+            xs={12}
+            sm={12}
+            lg={4}
+          >
+          <Overview
+              sx={{ height: '100%' }}
+              value={thisWeekCommits }
+              difference={thisWeekCommits - lastWeekCommits}
+              title="Commit Messages (This Week)"
+              positive={thisWeekCommits > lastWeekCommits}
+              mail
+            />
+          </Grid>
+
           <Grid
             xs={12}
             lg={6}
